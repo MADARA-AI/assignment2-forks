@@ -1,0 +1,45 @@
+Assignment 2 — Answers and explanations
+
+1) Short description of each example
+- fork_example.c
+  - Simple demonstration of fork(): parent and child continue executing from the same point.
+  - Shows getpid()/getppid() usage.
+
+- fork_wait_example.c
+  - Parent forks a child; parent uses waitpid() to wait for child termination.
+  - Child exits with a specific status (42) to demonstrate WIFEXITED/WEXITSTATUS.
+
+- fork_exec_example.c
+  - Parent forks; child replaces its image with an exec call (ls -l).
+  - Demonstrates execlp/execvp usage and that exec does not return on success.
+
+- pipe_example.c
+  - Creates a pipe, forks, parent writes into the pipe, child reads from the pipe.
+  - Demonstrates fd management: close unused ends, read/write semantics.
+
+- zombie_example.c
+  - Child exits immediately; parent sleeps to allow observing the child in 'Z' state (zombie).
+  - Useful for learning how zombies occur and why parents should reap children.
+
+- orphan_example.c
+  - Parent exits early; child continues and is reparented (typically to PID 1 / systemd).
+  - Demonstrates process reparenting behavior.
+
+2) What is the job of the Linker?
+- The linker takes object files and libraries and produces an executable (or shared library).
+- It resolves symbol references between object files, performs relocations, arranges sections (.text, .data, .bss), and includes needed static library code.
+- With dynamic linking, the linker will also record shared-library dependencies for the dynamic loader to resolve at runtime.
+
+3) What is the job of the Loader?
+- The loader (part of the OS/runtime dynamic linker) maps program segments into memory, sets up the process address space and stack (including argv/envp), and transfers control to the program entry point.
+- For dynamically linked executables it invokes the dynamic linker to locate and map shared libraries and perform relocations before main() runs.
+
+3) How to build & run
+- From the repo root:
+  - make         # builds all examples (Makefile present)
+  - ./bin/<prog> or run the Makefile's run-* targets if the Makefile builds into bin/
+  - Or use the provided Makefile.txt targets if you prefer that workflow.
+
+4) Notes for submission
+- Include .c files, Makefile (or Makefile.txt), README.md, ANSWERS.txt, LICENSE, and screenshots demonstrating compilation and runs.
+- For zombie_example, run it and quickly run: ps -o pid,ppid,state,cmd -p <child-pid> to see state 'Z'.
